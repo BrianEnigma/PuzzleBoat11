@@ -57,7 +57,28 @@ class LetterAnalyzer:
             self.positions[i][letter] = value
 
     def write_report(self):
-        pass
+        with open('report.md', 'w') as f:
+            # Write headers
+            f.write("|   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B | C | D | E | F | unknown |\n")
+            f.write("| - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - |\n")
+            # Each row
+            for pos in range(6):
+                f.write("| {0} | ".format(pos + 1))
+                # The main 16 hex columns
+                for score in range(16):
+                    matches = ''
+                    score_str = '{0:x}'.format(score).upper()
+                    for letter in range(26):
+                        letter_str = chr(ord('a') + letter)
+                        if self.positions[pos][letter_str] == score_str:
+                            matches += letter_str
+                    f.write(' {0} | '.format(matches))
+                no_match = ''
+                for letter in range(26):
+                    if self.positions[pos][chr(ord('a') + letter)] == -1:
+                        no_match += chr(ord('a') + letter)
+                f.write(' {0} | '.format(no_match))
+                f.write("\n")
 
 
 def extract(s: str):
@@ -85,3 +106,4 @@ if response_string is not None:
     value = value.replace('#', '').strip()
     analyzer.add_word(WORD, value)
     analyzer.save_state()
+    analyzer.write_report()

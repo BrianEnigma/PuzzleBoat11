@@ -60,7 +60,7 @@ class LetterAnalyzer:
         with open('report.md', 'w') as f:
             # Write headers
             f.write("|   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B | C | D | E | F | unknown |\n")
-            f.write("| - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - |\n")
+            f.write("| -:- | -:- | -:- | -:- | -:- | -:- | -:- | -:- | -:- | -:- | -:- | -:- | -:- | -:- | -:- | -:- | -:- | -:- |\n")
             # Each row
             for pos in range(6):
                 f.write("| {0} | ".format(pos + 1))
@@ -107,3 +107,6 @@ if response_string is not None:
     analyzer.add_word(WORD, value)
     analyzer.save_state()
     analyzer.write_report()
+    os.system('cat report.md| gawk -f format_table.awk > report2.md')
+    os.rename('report2.md', 'report.md')
+    os.system('cat report.md')
